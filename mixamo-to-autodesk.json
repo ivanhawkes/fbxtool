@@ -1,0 +1,345 @@
+{
+  "joints": [
+    {
+      "old-name": "mixamorig:Hips",
+      "new-name": "Hips",
+      "physics-proxy": "Hips__phys",
+      "ragdoll-proxy": "Hips__ragdoll",
+      "primitive-type": "Capsule"
+    },
+    {
+      "old-name": "mixamorig:Spine",
+      "new-name": "Spine",
+      "physics-proxy": "Spine__phys",
+      "ragdoll-proxy": "Spine__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Hips__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:Spine1",
+      "new-name": "Spine1",
+      "physics-proxy": "Spine1__phys",
+      "ragdoll-proxy": "Spine1__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Spine__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:Spine2",
+      "new-name": "Spine2"
+    },
+    {
+      "old-name": "mixamorig:Neck",
+      "new-name": "Neck",
+      "physics-proxy": "Neck__phys",
+      "ragdoll-proxy": "Neck__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Spine1__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:Head",
+      "new-name": "Head",
+      "physics-proxy": "Head__phys",
+      "ragdoll-proxy": "Head__ragdoll",
+      "primitive-type": "Sphere",
+      "parent-node": "Neck__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:HeadTop_End",
+      "new-name": "HeadTopEnd"
+    },
+    {
+      "old-name": "mixamorig:RightEye",
+      "new-name": "RightEye"
+    },
+    {
+      "old-name": "mixamorig:LeftEye",
+      "new-name": "LeftEye"
+    },
+    {
+      "old-name": "mixamorig:RightShoulder",
+      "new-name": "RightShoulder",
+      "ragdoll-proxy": "RightShoulder__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Neck__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:RightArm",
+      "new-name": "RightArm",
+      "physics-proxy": "RightArm__phys",
+      "ragdoll-proxy": "RightArm__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "RightShoulder__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:RightForeArm",
+      "new-name": "RightForeArm",
+      "physics-proxy": "RightForeArm__phys",
+      "ragdoll-proxy": "RightForeArm__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "RightArm__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:RightHand",
+      "new-name": "RightHand",
+      "physics-proxy": "RightHand__phys",
+      "ragdoll-proxy": "RightHand__ragdoll",
+      "primitive-type": "Box",
+      "parent-node": "RightForeArm__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:RightHandPinky1",
+      "new-name": "RightHandPinky1"
+    },
+    {
+      "old-name": "mixamorig:RightHandPinky2",
+      "new-name": "RightHandPinky2"
+    },
+    {
+      "old-name": "mixamorig:RightHandPinky3",
+      "new-name": "RightHandPinky3"
+    },
+    {
+      "old-name": "mixamorig:RightHandPinky4",
+      "new-name": "RightHandPinky4"
+    },
+    {
+      "old-name": "mixamorig:RightHandRing1",
+      "new-name": "RightHandRing1"
+    },
+    {
+      "old-name": "mixamorig:RightHandRing2",
+      "new-name": "RightHandRing2"
+    },
+    {
+      "old-name": "mixamorig:RightHandRing3",
+      "new-name": "RightHandRing3"
+    },
+    {
+      "old-name": "mixamorig:RightHandRing4",
+      "new-name": "RightHandRing4"
+    },
+    {
+      "old-name": "mixamorig:RightHandMiddle1",
+      "new-name": "RightHandMiddle1"
+    },
+    {
+      "old-name": "mixamorig:RightHandMiddle2",
+      "new-name": "RightHandMiddle2"
+    },
+    {
+      "old-name": "mixamorig:RightHandMiddle3",
+      "new-name": "RightHandMiddle3"
+    },
+    {
+      "old-name": "mixamorig:RightHandMiddle4",
+      "new-name": "RightHandMiddle4"
+    },
+    {
+      "old-name": "mixamorig:RightHandIndex1",
+      "new-name": "RightHandIndex1"
+    },
+    {
+      "old-name": "mixamorig:RightHandIndex2",
+      "new-name": "RightHandIndex2"
+    },
+    {
+      "old-name": "mixamorig:RightHandIndex3",
+      "new-name": "RightHandIndex3"
+    },
+    {
+      "old-name": "mixamorig:RightHandIndex4",
+      "new-name": "RightHandIndex4"
+    },
+    {
+      "old-name": "mixamorig:RightHandThumb1",
+      "new-name": "RightHandThumb1"
+    },
+    {
+      "old-name": "mixamorig:RightHandThumb2",
+      "new-name": "RightHandThumb2"
+    },
+    {
+      "old-name": "mixamorig:RightHandThumb3",
+      "new-name": "RightHandThumb3"
+    },
+    {
+      "old-name": "mixamorig:RightHandThumb4",
+      "new-name": "RightHandThumb4"
+    },
+    {
+      "old-name": "mixamorig:LeftShoulder",
+      "new-name": "LeftShoulder",
+      "ragdoll-proxy": "LeftShoulder__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Neck__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:LeftArm",
+      "new-name": "LeftArm",
+      "physics-proxy": "LeftArm__phys",
+      "ragdoll-proxy": "LeftArm__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftShoulder__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:LeftForeArm",
+      "new-name": "LeftForeArm",
+      "physics-proxy": "LeftForeArm__phys",
+      "ragdoll-proxy": "LeftForeArm__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftArm__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:LeftHand",
+      "new-name": "LeftHand",
+      "physics-proxy": "LeftHand__phys",
+      "ragdoll-proxy": "LeftHand__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftForeArm__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:LeftHandThumb1",
+      "new-name": "LeftHandThumb1"
+    },
+    {
+      "old-name": "mixamorig:LeftHandThumb2",
+      "new-name": "LeftHandThumb2"
+    },
+    {
+      "old-name": "mixamorig:LeftHandThumb3",
+      "new-name": "LeftHandThumb3"
+    },
+    {
+      "old-name": "mixamorig:LeftHandThumb4",
+      "new-name": "LeftHandThumb4"
+    },
+    {
+      "old-name": "mixamorig:LeftHandIndex1",
+      "new-name": "LeftHandIndex1"
+    },
+    {
+      "old-name": "mixamorig:LeftHandIndex2",
+      "new-name": "LeftHandIndex2"
+    },
+    {
+      "old-name": "mixamorig:LeftHandIndex3",
+      "new-name": "LeftHandIndex3"
+    },
+    {
+      "old-name": "mixamorig:LeftHandIndex4",
+      "new-name": "LeftHandIndex4"
+    },
+    {
+      "old-name": "mixamorig:LeftHandMiddle1",
+      "new-name": "LeftHandMiddle1"
+    },
+    {
+      "old-name": "mixamorig:LeftHandMiddle2",
+      "new-name": "LeftHandMiddle2"
+    },
+    {
+      "old-name": "mixamorig:LeftHandMiddle3",
+      "new-name": "LeftHandMiddle3"
+    },
+    {
+      "old-name": "mixamorig:LeftHandMiddle4",
+      "new-name": "LeftHandMiddle4"
+    },
+    {
+      "old-name": "mixamorig:LeftHandRing1",
+      "new-name": "LeftHandRing1"
+    },
+    {
+      "old-name": "mixamorig:LeftHandRing2",
+      "new-name": "LeftHandRing2"
+    },
+    {
+      "old-name": "mixamorig:LeftHandRing3",
+      "new-name": "LeftHandRing3"
+    },
+    {
+      "old-name": "mixamorig:LeftHandRing4",
+      "new-name": "LeftHandRing4"
+    },
+    {
+      "old-name": "mixamorig:LeftHandPinky1",
+      "new-name": "LeftHandPinky1"
+    },
+    {
+      "old-name": "mixamorig:LeftHandPinky2",
+      "new-name": "LeftHandPinky2"
+    },
+    {
+      "old-name": "mixamorig:LeftHandPinky3",
+      "new-name": "LeftHandPinky3"
+    },
+    {
+      "old-name": "mixamorig:LeftHandPinky4",
+      "new-name": "LeftHandPinky4"
+    },
+    {
+      "old-name": "mixamorig:RightUpLeg",
+      "new-name": "RightUpLeg",
+      "physics-proxy": "RightUpLeg__phys",
+      "ragdoll-proxy": "RightUpLeg__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Hips__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:RightLeg",
+      "new-name": "RightLeg",
+      "physics-proxy": "RightLeg__phys",
+      "ragdoll-proxy": "RightLeg__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "RightUpLeg__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:RightFoot",
+      "new-name": "RightFoot",
+      "physics-proxy": "RightFoot__phys",
+      "ragdoll-proxy": "RightFoot__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "RightLeg__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:RightToeBase",
+      "new-name": "RightToeBase"
+    },
+    {
+      "old-name": "mixamorig:RightToe_End",
+      "new-name": "RightToeEnd"
+    },
+    {
+      "old-name": "mixamorig:LeftUpLeg",
+      "new-name": "LeftUpLeg",
+      "physics-proxy": "LeftUpLeg__phys",
+      "ragdoll-proxy": "LeftUpLeg__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Hips__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:LeftLeg",
+      "new-name": "LeftLeg",
+      "physics-proxy": "LeftLeg__phys",
+      "ragdoll-proxy": "LeftLeg__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftUpLeg__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:LeftFoot",
+      "new-name": "LeftFoot",
+      "physics-proxy": "LeftFoot__phys",
+      "ragdoll-proxy": "LeftFoot__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftLeg__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:LeftToeBase",
+      "new-name": "LeftToeBase"
+    },
+    {
+      "old-name": "mixamorig:LeftToe_End",
+      "new-name": "LeftToeEnd"
+    }
+  ]
+}
