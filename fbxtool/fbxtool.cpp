@@ -56,6 +56,8 @@ void RenameSkeleton(FbxScene* pFbxScene, FbxNode* pFbxNode, std::string indexNam
 		DisplayString("Name: ", pFbxNode->GetName());
 	}
 
+	DisplayInt("  Skeleton Type: ", lSkeleton->GetSkeletonType());
+
 	auto transform = pFbxNode->LclTranslation.Get();
 	Display3DVector("  Transform: ", transform);
 	auto rotation = pFbxNode->LclRotation.Get();
@@ -70,8 +72,8 @@ void RenameSkeleton(FbxScene* pFbxScene, FbxNode* pFbxNode, std::string indexNam
 	if (strcmp(pFbxNode->GetName(), "Hips") == 0)
 	{
 		// Zero the hips, Mixamo leaves them offset slightly.
-		transform.mData [0] = 0.0;
-		transform.mData [2] = 0.0;
+		transform.mData [0] = 0.0f;
+		transform.mData [2] = 0.0f;
 		pFbxNode->LclTranslation.Set(transform);
 
 		// Apply a rotation.
@@ -329,6 +331,44 @@ void ApplyMixamoFixes(FbxManager* pFbxManager, FbxScene* pFbxScene)
 }
 
 
+void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeName, const char* parentNodeName, FbxVector4 offset)
+{
+	FbxNode* sceneRootNode = pFbxScene->GetRootNode();
+
+	// Add a new node  and parent it.
+	FbxString newNodeName(nodeName);
+	FbxSkeleton* skeletonRootAttribute = FbxSkeleton::Create(pFbxScene, newNodeName);
+	skeletonRootAttribute->SetSkeletonType(FbxSkeleton::eLimbNode);
+
+	FbxNode* skeletonNode = FbxNode::Create(pFbxScene, newNodeName.Buffer());
+	skeletonNode->SetNodeAttribute(skeletonRootAttribute);
+	skeletonNode->LclTranslation.Set(offset);
+
+	// Parent the node.
+	if (auto pFbxNode = pFbxScene->FindNodeByName(parentNodeName))
+	{
+		//auto parentRotation = pFbxNode->PreRotation.Get();
+		//FbxVector4 newRotation { -parentRotation.mData [0],-parentRotation.mData [1],-parentRotation.mData [2] };
+		//skeletonNode->PreRotation.Set(newRotation);
+
+		pFbxNode->AddChild(skeletonNode);
+	}
+}
+
+
+void AddIkJoints(FbxManager* pFbxManager, FbxScene* pFbxScene)
+{
+	// Foot planting.
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeTargetRight", "RightFoot", FbxVector4(0.0f, 0.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeWeightRight", "RightFoot", FbxVector4(0.0f, 100.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeTargetLeft", "LeftFoot", FbxVector4(0.0f, 0.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeWeightLeft", "LeftFoot", FbxVector4(0.0f, 100.0f, 0.0f));
+
+	// Looking.
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 Look", "Head", FbxVector4(0.0f, 0.0f, 6.0f));
+}
+
+
 bool ProcessFile(FbxManager* pFbxManager, FbxScene* pFbxScene, FbxString fbxInFilePath, FbxString fbxOutFilePath)
 {
 	bool result = false;
@@ -350,6 +390,9 @@ bool ProcessFile(FbxManager* pFbxManager, FbxScene* pFbxScene, FbxString fbxInFi
 
 			if (applyMixamoFixes)
 				ApplyMixamoFixes(pFbxManager, pFbxScene);
+
+			// Add a set of joints for IK management.
+			AddIkJoints(pFbxManager, pFbxScene);
 
 			// We really only want the base part of the filename. This code is windows specific and MS compiler specific.
 			char fname [255];
