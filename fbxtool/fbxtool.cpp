@@ -69,6 +69,10 @@ void RenameSkeleton(FbxScene* pFbxScene, FbxNode* pFbxNode, std::string indexNam
 	Display3DVector("  Post-Rotation: ", postRotation);
 	DisplayString("");
 
+	FbxAMatrix& worldTM = pFbxNode->EvaluateGlobalTransform();
+	Display3DVector("  World Rotation: ", worldTM.GetR());
+	Display3DVector("  World Translation: ", worldTM.GetT());
+
 	if (strcmp(pFbxNode->GetName(), "Hips") == 0)
 	{
 		// Zero the hips, Mixamo leaves them offset slightly.
@@ -331,7 +335,11 @@ void ApplyMixamoFixes(FbxManager* pFbxManager, FbxScene* pFbxScene)
 }
 
 
-void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeName, const char* parentNodeName, FbxVector4 offset)
+void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeName, const char* parentNodeName,
+	int offsetType = 0,
+	FbxVector4 offset = FbxVector4(0.0f, 0.0f, 0.0f),
+	FbxQuaternion rotation = FbxQuaternion()
+)
 {
 	FbxNode* sceneRootNode = pFbxScene->GetRootNode();
 
@@ -345,13 +353,62 @@ void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeN
 	skeletonNode->LclTranslation.Set(offset);
 
 	// Parent the node.
-	if (auto pFbxNode = pFbxScene->FindNodeByName(parentNodeName))
+	if (auto pParentNode = pFbxScene->FindNodeByName(parentNodeName))
 	{
-		//auto parentRotation = pFbxNode->PreRotation.Get();
-		//FbxVector4 newRotation { -parentRotation.mData [0],-parentRotation.mData [1],-parentRotation.mData [2] };
-		//skeletonNode->PreRotation.Set(newRotation);
+		// Foot plane weights.
+		if (offsetType == 1)
+		{
+			auto parentRotation = pParentNode->PreRotation.Get();
+			FbxVector4 newRotation { -parentRotation.mData [0], -parentRotation.mData [1], -parentRotation.mData [2], 0 };
+			FbxQuaternion quatNew;
+			quatNew.ComposeSphericalXYZ(newRotation);
+			auto weightOffset = quatNew * offset.Length();
+			skeletonNode->LclTranslation.Set(weightOffset);
+		}
 
-		pFbxNode->AddChild(skeletonNode);
+		// Foot target - should be at 0 on the Z axis.
+		if (offsetType == 2)
+		{
+			// The parent transform in world co-ords.
+			FbxAMatrix& worldTM = pParentNode->EvaluateGlobalTransform();
+			FbxVector4 trans = worldTM.GetT();
+			double length = trans.mData [1];
+
+			auto preRotation = pParentNode->PreRotation.Get();
+
+			FbxQuaternion quatOther;
+			quatOther.ComposeSphericalXYZ(FbxVector4(0.0f, 90.0f, 0.0f, 0.0f));
+
+			//auto newVector = worldTM.GetQ() * -length;
+
+			FbxQuaternion quatNew;
+			//quatNew.ComposeSphericalXYZ (FbxVector4(0.0f, 180.0f - worldTM.GetR().mData [1], 0.0f));
+			//quatNew.ComposeSphericalXYZ(FbxVector4(180.0f, 180.0f - preRotation.mData [1], 180.0f - preRotation.mData [2]));
+			quatNew.ComposeSphericalXYZ(FbxVector4(0.0f, 0.0f, 47.71f));
+			//quatNew.ComposeSphericalXYZ(FbxVector4(180.0f - worldTM.GetR().mData [0], 0.0f, 180.0f - worldTM.GetR().mData [2]));
+			//auto newVector = quatNew * length;
+			//auto newVector = quatOther / quatNew * length;
+			//auto newVector = worldTM.Inverse().GetQ() * length;
+
+			FbxQuaternion quatForward(0.0f, 0.0f, 1.0f);
+			FbxVector4 vecForward(0.0f, 0.0f, 1.0f);
+
+			FbxVector4 newVector;
+			newVector.SetXYZ(rotation);// that just get's the rotation in degrees.
+			//auto newVector = rotation * length;
+			//auto xxx = rotation * vecForward;
+			//Display4DVector("  newVector: ", newVector.DecomposeSphericalXYZ());
+			Display4DVector("  newVector: ", newVector);
+			DisplayQuaternion("  rotation : ", rotation);
+			//DisplayQuaternion("  newVector: ", newVector);
+
+			//FbxVector4 newVector(0.0f, trans.mData [1], 0.0f);
+
+			// Offset is in local co-ords, so this is wrong - it needs a rotation applied to it.
+			skeletonNode->LclTranslation.Set(newVector);
+		}
+
+		pParentNode->AddChild(skeletonNode);
 	}
 }
 
@@ -359,13 +416,30 @@ void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeN
 void AddIkJoints(FbxManager* pFbxManager, FbxScene* pFbxScene)
 {
 	// Foot planting.
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeTargetRight", "RightFoot", FbxVector4(0.0f, 0.0f, 0.0f));
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeWeightRight", "RightFoot", FbxVector4(0.0f, 100.0f, 0.0f));
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeTargetLeft", "LeftFoot", FbxVector4(0.0f, 0.0f, 0.0f));
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeWeightLeft", "LeftFoot", FbxVector4(0.0f, 100.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeTargetRight", "RightFoot", 2, FbxVector4(0.0f, 0.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeWeightRight", "RightFoot", 1, FbxVector4(0.0f, 100.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeTargetLeft", "LeftFoot", 2, FbxVector4(0.0f, 0.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeWeightLeft", "LeftFoot", 1, FbxVector4(0.0f, 100.0f, 0.0f));
+
+	// Hands - weapon bones and positioning IK.
+	AddNewJoint(pFbxManager, pFbxScene, "RightHandIK", "RightHand", 0, FbxVector4(0.0f, 20.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "LeftHandIK", "LeftHand", 0, FbxVector4(0.0f, 20.0f, 0.0f));
 
 	// Looking.
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 Look", "Head", FbxVector4(0.0f, 0.0f, 6.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "Bip01 Look", "Head", 0, FbxVector4(0.0f, 0.0f, 6.0f));
+
+	// Testing this shit.
+	for (int i = 0; i < 30; ++i)
+	{
+		float step = i * 12.0f;
+		FbxQuaternion quatNew;
+		quatNew.ComposeSphericalXYZ(FbxVector4(step, step, 0.0f, 0.0f));
+		quatNew.Normalize();
+
+		char tmpString [255];
+		sprintf_s(tmpString, "Target-X-%f", step);
+		AddNewJoint(pFbxManager, pFbxScene, tmpString, "RightFoot", 2, FbxVector4(0.0f, 0.0f, 0.0f), quatNew);
+	}
 }
 
 

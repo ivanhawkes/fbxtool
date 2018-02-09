@@ -25,6 +25,7 @@ void Display3DVector(const char* pHeader, FbxVector4 pValue, const char* pSuffix
 void DisplayColor(const char* pHeader, FbxColor pValue, const char* pSuffix  = "");
 void Display4DVector(const char* pHeader, FbxVector4 pValue, const char* pSuffix  = "");
 
+void DisplayQuaternion(const char* pHeader, FbxQuaternion pValue, const char* pSuffix = "");
 
 #endif // #ifndef _DISPLAY_COMMON_H
 
