@@ -38,6 +38,29 @@ bool isVerbose { false };
 bool applyMixamoFixes { false };
 
 
+// Multiply a quaternion by a vector.
+
+FbxVector4 QMulV(const FbxQuaternion& q, const FbxVector4& v)
+{
+	FbxVector4 out;
+	FbxVector4 r2;
+
+	r2.mData[0] = (q.mData[1] * v.mData[2] - q.mData[2] * v.mData[1]) + q.mData[3] * v.mData[0];
+	r2.mData [1] = (q.mData[2] * v.mData[0] - q.mData[0] * v.mData[2]) + q.mData[3] * v.mData[1];
+	r2.mData [2] = (q.mData[0] * v.mData[1] - q.mData[1] * v.mData[0]) + q.mData[3] * v.mData[2];
+
+	out.mData[0] = (r2.mData[2] * q.mData[1] - r2.mData[1] * q.mData[2]);
+	out.mData[0] += out.mData[0] + v.mData[0];
+	out.mData[1] = (r2.mData[0] * q.mData[2] - r2.mData[2] * q.mData[0]);
+	out.mData[1] += out.mData[1] + v.mData[1];
+	out.mData[2] = (r2.mData[1] * q.mData[0] - r2.mData[0] * q.mData[1]);
+	out.mData[2] += out.mData[2] + v.mData[2];
+
+	return out;
+}
+
+
+
 void RenameSkeleton(FbxScene* pFbxScene, FbxNode* pFbxNode, std::string indexName, std::map<std::string, SJointEnhancement> jointMap)
 {
 	FbxSkeleton* lSkeleton = (FbxSkeleton*)pFbxNode->GetNodeAttribute();
@@ -350,6 +373,8 @@ void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeN
 
 	FbxNode* skeletonNode = FbxNode::Create(pFbxScene, newNodeName.Buffer());
 	skeletonNode->SetNodeAttribute(skeletonRootAttribute);
+	
+	// The default offset is fine in most cases.
 	skeletonNode->LclTranslation.Set(offset);
 
 	// Parent the node.
@@ -358,56 +383,31 @@ void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeN
 		// Foot plane weights.
 		if (offsetType == 1)
 		{
-			auto parentRotation = pParentNode->PreRotation.Get();
-			FbxVector4 newRotation { -parentRotation.mData [0], -parentRotation.mData [1], -parentRotation.mData [2], 0 };
-			FbxQuaternion quatNew;
-			quatNew.ComposeSphericalXYZ(newRotation);
-			auto weightOffset = quatNew * offset.Length();
-			skeletonNode->LclTranslation.Set(weightOffset);
+			// These are meant to point upwards and be approximately 100 units in length. Taking the inverse of the world
+			// rotation and multiplying it by an up vector will give us a second vector pointing in the right direction. 
+			FbxAMatrix& worldTM = pParentNode->EvaluateGlobalTransform();
+			FbxQuaternion rot = worldTM.GetQ();
+			rot.Inverse();			
+			FbxVector4 newVector = QMulV(rot, FbxVector4 { 0.0f, 1.0f, 0.0f });
+			skeletonNode->LclTranslation.Set(newVector * 100.0f);
 		}
 
 		// Foot target - should be at 0 on the Z axis.
 		if (offsetType == 2)
 		{
-			// The parent transform in world co-ords.
+			// These are meant to point straight down and be level with the ground plane. Taking the inverse of the world
+			// rotation and multiplying it by an down vector will give us a second vector pointing in the right direction. Just
+			// multiply that by the world height of the foot and you're set. 
 			FbxAMatrix& worldTM = pParentNode->EvaluateGlobalTransform();
+			FbxQuaternion rot = worldTM.GetQ();
+			rot.Inverse();
 			FbxVector4 trans = worldTM.GetT();
 			double length = trans.mData [1];
-
-			auto preRotation = pParentNode->PreRotation.Get();
-
-			FbxQuaternion quatOther;
-			quatOther.ComposeSphericalXYZ(FbxVector4(0.0f, 90.0f, 0.0f, 0.0f));
-
-			//auto newVector = worldTM.GetQ() * -length;
-
-			FbxQuaternion quatNew;
-			//quatNew.ComposeSphericalXYZ (FbxVector4(0.0f, 180.0f - worldTM.GetR().mData [1], 0.0f));
-			//quatNew.ComposeSphericalXYZ(FbxVector4(180.0f, 180.0f - preRotation.mData [1], 180.0f - preRotation.mData [2]));
-			quatNew.ComposeSphericalXYZ(FbxVector4(0.0f, 0.0f, 47.71f));
-			//quatNew.ComposeSphericalXYZ(FbxVector4(180.0f - worldTM.GetR().mData [0], 0.0f, 180.0f - worldTM.GetR().mData [2]));
-			//auto newVector = quatNew * length;
-			//auto newVector = quatOther / quatNew * length;
-			//auto newVector = worldTM.Inverse().GetQ() * length;
-
-			FbxQuaternion quatForward(0.0f, 0.0f, 1.0f);
-			FbxVector4 vecForward(0.0f, 0.0f, 1.0f);
-
-			FbxVector4 newVector;
-			newVector.SetXYZ(rotation);// that just get's the rotation in degrees.
-			//auto newVector = rotation * length;
-			//auto xxx = rotation * vecForward;
-			//Display4DVector("  newVector: ", newVector.DecomposeSphericalXYZ());
-			Display4DVector("  newVector: ", newVector);
-			DisplayQuaternion("  rotation : ", rotation);
-			//DisplayQuaternion("  newVector: ", newVector);
-
-			//FbxVector4 newVector(0.0f, trans.mData [1], 0.0f);
-
-			// Offset is in local co-ords, so this is wrong - it needs a rotation applied to it.
-			skeletonNode->LclTranslation.Set(newVector);
+			FbxVector4 newVector = QMulV(rot, FbxVector4 { 0.0f, -1.0f, 0.0f });
+			skeletonNode->LclTranslation.Set(newVector * length);
 		}
 
+		// Add this to it's proper parent.
 		pParentNode->AddChild(skeletonNode);
 	}
 }
@@ -428,18 +428,8 @@ void AddIkJoints(FbxManager* pFbxManager, FbxScene* pFbxScene)
 	// Looking.
 	AddNewJoint(pFbxManager, pFbxScene, "Bip01 Look", "Head", 0, FbxVector4(0.0f, 0.0f, 6.0f));
 
-	// Testing this shit.
-	for (int i = 0; i < 30; ++i)
-	{
-		float step = i * 12.0f;
-		FbxQuaternion quatNew;
-		quatNew.ComposeSphericalXYZ(FbxVector4(step, step, 0.0f, 0.0f));
-		quatNew.Normalize();
-
-		char tmpString [255];
-		sprintf_s(tmpString, "Target-X-%f", step);
-		AddNewJoint(pFbxManager, pFbxScene, tmpString, "RightFoot", 2, FbxVector4(0.0f, 0.0f, 0.0f), quatNew);
-	}
+	// Camera. Just place it approximately where it typically goes for now.
+	AddNewJoint(pFbxManager, pFbxScene, "Camera", "Head", 0, FbxVector4(0.0f, 8.3f, 7.4f));
 }
 
 
