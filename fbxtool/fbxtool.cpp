@@ -104,6 +104,10 @@ void RenameSkeleton(FbxScene* pFbxScene, FbxNode* pFbxNode, std::string indexNam
 		transform.mData [2] = 0.0f;
 		pFbxNode->LclTranslation.Set(transform);
 
+		// Zero the pre-rotation.
+		//FbxDouble3 preRotation(0.0f, 0.0f, 0.0f);
+		//pFbxNode->PreRotation.Set(preRotation);
+
 		// Apply a rotation.
 		//double temp = preRotation.mData [1];
 		//preRotation.mData [1] = preRotation.mData [2];
@@ -446,8 +450,8 @@ bool ProcessFile(FbxManager* pFbxManager, FbxScene* pFbxScene, FbxString fbxInFi
 		if (LoadScene(pFbxManager, pFbxScene, fbxInFilePath))
 		{
 			// Switch to a Z-Up co-ordinate system.
-			FbxAxisSystem max;
-			max.ConvertScene(pFbxScene);
+			//FbxAxisSystem max;
+			//max.ConvertScene(pFbxScene);
 
 			// Display the scene.
 			DisplayMetaData(pFbxScene);
