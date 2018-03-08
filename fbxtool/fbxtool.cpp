@@ -36,6 +36,7 @@ struct SJointEnhancement
 std::map<std::string, SJointEnhancement> jointMap;
 bool isVerbose { false };
 bool applyMixamoFixes { false };
+bool addIK { false };
 
 
 // Multiply a quaternion by a vector.
@@ -45,16 +46,16 @@ FbxVector4 QMulV(const FbxQuaternion& q, const FbxVector4& v)
 	FbxVector4 out;
 	FbxVector4 r2;
 
-	r2.mData[0] = (q.mData[1] * v.mData[2] - q.mData[2] * v.mData[1]) + q.mData[3] * v.mData[0];
-	r2.mData [1] = (q.mData[2] * v.mData[0] - q.mData[0] * v.mData[2]) + q.mData[3] * v.mData[1];
-	r2.mData [2] = (q.mData[0] * v.mData[1] - q.mData[1] * v.mData[0]) + q.mData[3] * v.mData[2];
+	r2.mData [0] = (q.mData [1] * v.mData [2] - q.mData [2] * v.mData [1]) + q.mData [3] * v.mData [0];
+	r2.mData [1] = (q.mData [2] * v.mData [0] - q.mData [0] * v.mData [2]) + q.mData [3] * v.mData [1];
+	r2.mData [2] = (q.mData [0] * v.mData [1] - q.mData [1] * v.mData [0]) + q.mData [3] * v.mData [2];
 
-	out.mData[0] = (r2.mData[2] * q.mData[1] - r2.mData[1] * q.mData[2]);
-	out.mData[0] += out.mData[0] + v.mData[0];
-	out.mData[1] = (r2.mData[0] * q.mData[2] - r2.mData[2] * q.mData[0]);
-	out.mData[1] += out.mData[1] + v.mData[1];
-	out.mData[2] = (r2.mData[1] * q.mData[0] - r2.mData[0] * q.mData[1]);
-	out.mData[2] += out.mData[2] + v.mData[2];
+	out.mData [0] = (r2.mData [2] * q.mData [1] - r2.mData [1] * q.mData [2]);
+	out.mData [0] += out.mData [0] + v.mData [0];
+	out.mData [1] = (r2.mData [0] * q.mData [2] - r2.mData [2] * q.mData [0]);
+	out.mData [1] += out.mData [1] + v.mData [1];
+	out.mData [2] = (r2.mData [1] * q.mData [0] - r2.mData [0] * q.mData [1]);
+	out.mData [2] += out.mData [2] + v.mData [2];
 
 	return out;
 }
@@ -373,7 +374,7 @@ void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeN
 
 	FbxNode* skeletonNode = FbxNode::Create(pFbxScene, newNodeName.Buffer());
 	skeletonNode->SetNodeAttribute(skeletonRootAttribute);
-	
+
 	// The default offset is fine in most cases.
 	skeletonNode->LclTranslation.Set(offset);
 
@@ -387,7 +388,7 @@ void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeN
 			// rotation and multiplying it by an up vector will give us a second vector pointing in the right direction. 
 			FbxAMatrix& worldTM = pParentNode->EvaluateGlobalTransform();
 			FbxQuaternion rot = worldTM.GetQ();
-			rot.Inverse();			
+			rot.Inverse();
 			FbxVector4 newVector = QMulV(rot, FbxVector4 { 0.0f, 1.0f, 0.0f });
 			skeletonNode->LclTranslation.Set(newVector * 100.0f);
 		}
@@ -416,17 +417,17 @@ void AddNewJoint(FbxManager* pFbxManager, FbxScene* pFbxScene, const char* nodeN
 void AddIkJoints(FbxManager* pFbxManager, FbxScene* pFbxScene)
 {
 	// Foot planting.
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeTargetRight", "RightFoot", 2, FbxVector4(0.0f, 0.0f, 0.0f));
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeWeightRight", "RightFoot", 1, FbxVector4(0.0f, 100.0f, 0.0f));
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeTargetLeft", "LeftFoot", 2, FbxVector4(0.0f, 0.0f, 0.0f));
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 planeWeightLeft", "LeftFoot", 1, FbxVector4(0.0f, 100.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "RightFootIKTarget", "RightFoot", 2, FbxVector4(0.0f, 0.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "RightFootIKWeight", "RightFoot", 1, FbxVector4(0.0f, 100.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "LeftFootIKTarget", "LeftFoot", 2, FbxVector4(0.0f, 0.0f, 0.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "LeftFootIKWeight", "LeftFoot", 1, FbxVector4(0.0f, 100.0f, 0.0f));
 
 	// Hands - weapon bones and positioning IK.
 	AddNewJoint(pFbxManager, pFbxScene, "RightHandIK", "RightHand", 0, FbxVector4(0.0f, 20.0f, 0.0f));
 	AddNewJoint(pFbxManager, pFbxScene, "LeftHandIK", "LeftHand", 0, FbxVector4(0.0f, 20.0f, 0.0f));
 
 	// Looking.
-	AddNewJoint(pFbxManager, pFbxScene, "Bip01 Look", "Head", 0, FbxVector4(0.0f, 0.0f, 6.0f));
+	AddNewJoint(pFbxManager, pFbxScene, "HeadIKLook", "Head", 0, FbxVector4(0.0f, 0.0f, 6.0f));
 
 	// Camera. Just place it approximately where it typically goes for now.
 	AddNewJoint(pFbxManager, pFbxScene, "Camera", "Head", 0, FbxVector4(0.0f, 8.3f, 7.4f));
@@ -456,7 +457,8 @@ bool ProcessFile(FbxManager* pFbxManager, FbxScene* pFbxScene, FbxString fbxInFi
 				ApplyMixamoFixes(pFbxManager, pFbxScene);
 
 			// Add a set of joints for IK management.
-			AddIkJoints(pFbxManager, pFbxScene);
+			if (addIK)
+				AddIkJoints(pFbxManager, pFbxScene);
 
 			// We really only want the base part of the filename. This code is windows specific and MS compiler specific.
 			char fname [255];
@@ -574,9 +576,10 @@ int main(int argc, char** argv)
 		["-v"] ["--verbose"]("Output verbose information")
 		| Opt(jointMetaFilePath, "Joint meta file")
 		["-j"] ["--joints"]
+		| Opt(addIK)
+		["-k"] ["--add-ik"]("Add standard IK bones to the model")
 		| Opt(applyMixamoFixes)
-		["-f"] ["--fixamo"]
-		("Apply fixes to Mixamo model");
+		["-f"] ["--fixamo"]("Apply fixes to Mixamo model");
 
 	auto result = cli.parse(Args(argc, argv));
 	if (!result) {

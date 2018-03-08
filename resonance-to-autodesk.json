@@ -1,0 +1,349 @@
+{
+  "joints": [
+    {
+      "old-name": "pelvis01",
+      "new-name": "Hips",
+      "physics-proxy": "Hips__phys",
+      "ragdoll-proxy": "Hips__ragdoll",
+      "primitive-type": "Capsule"
+    },
+    {
+      "old-name": "spineA01",
+      "new-name": "Spine",
+      "physics-proxy": "Spine__phys",
+      "ragdoll-proxy": "Spine__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Hips__ragdoll"
+    },
+    {
+      "old-name": "spineB01",
+      "new-name": "Spine1",
+      "physics-proxy": "Spine1__phys",
+      "ragdoll-proxy": "Spine1__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Spine__ragdoll"
+    },
+    {
+      "old-name": "spineC01",
+      "new-name": "Spine2"
+    },
+    {
+      "old-name": "chest01",
+      "new-name": "Spine3"
+    },
+    {
+      "old-name": "neck_01",
+      "new-name": "Neck",
+      "physics-proxy": "Neck__phys",
+      "ragdoll-proxy": "Neck__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Spine1__ragdoll"
+    },
+    {
+      "old-name": "head",
+      "new-name": "Head",
+      "physics-proxy": "Head__phys",
+      "ragdoll-proxy": "Head__ragdoll",
+      "primitive-type": "Sphere",
+      "parent-node": "Neck__ragdoll"
+    },
+    {
+      "old-name": "mixamorig:HeadTop_End",
+      "new-name": "HeadTopEnd"
+    },
+    {
+      "old-name": "mixamorig:RightEye",
+      "new-name": "RightEye"
+    },
+    {
+      "old-name": "mixamorig:LeftEye",
+      "new-name": "LeftEye"
+    },
+    {
+      "old-name": "clavicle_r",
+      "new-name": "RightShoulder",
+      "ragdoll-proxy": "RightShoulder__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Neck__ragdoll"
+    },
+    {
+      "old-name": "upperarm_r",
+      "new-name": "RightArm",
+      "physics-proxy": "RightArm__phys",
+      "ragdoll-proxy": "RightArm__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "RightShoulder__ragdoll"
+    },
+    {
+      "old-name": "lowerarm_r",
+      "new-name": "RightForeArm",
+      "physics-proxy": "RightForeArm__phys",
+      "ragdoll-proxy": "RightForeArm__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "RightArm__ragdoll"
+    },
+    {
+      "old-name": "hand_r",
+      "new-name": "RightHand",
+      "physics-proxy": "RightHand__phys",
+      "ragdoll-proxy": "RightHand__ragdoll",
+      "primitive-type": "Box",
+      "parent-node": "RightForeArm__ragdoll"
+    },
+    {
+      "old-name": "pinky_01_r",
+      "new-name": "RightHandPinky1"
+    },
+    {
+      "old-name": "pinky_02_r",
+      "new-name": "RightHandPinky2"
+    },
+    {
+      "old-name": "pinky_03_r",
+      "new-name": "RightHandPinky3"
+    },
+    {
+      "old-name": "pinky_04_r",
+      "new-name": "RightHandPinky4"
+    },
+    {
+      "old-name": "ring_01_r",
+      "new-name": "RightHandRing1"
+    },
+    {
+      "old-name": "ring_02_r",
+      "new-name": "RightHandRing2"
+    },
+    {
+      "old-name": "ring_03_r",
+      "new-name": "RightHandRing3"
+    },
+    {
+      "old-name": "ring_04_r",
+      "new-name": "RightHandRing4"
+    },
+    {
+      "old-name": "middle_01_r1",
+      "new-name": "RightHandMiddle1"
+    },
+    {
+      "old-name": "middle_02_r",
+      "new-name": "RightHandMiddle2"
+    },
+    {
+      "old-name": "middle_03_r",
+      "new-name": "RightHandMiddle3"
+    },
+    {
+      "old-name": "middle_04_r",
+      "new-name": "RightHandMiddle4"
+    },
+    {
+      "old-name": "index_01_r",
+      "new-name": "RightHandIndex1"
+    },
+    {
+      "old-name": "index_02_r",
+      "new-name": "RightHandIndex2"
+    },
+    {
+      "old-name": "index_03_r",
+      "new-name": "RightHandIndex3"
+    },
+    {
+      "old-name": "index_04_r",
+      "new-name": "RightHandIndex4"
+    },
+    {
+      "old-name": "thumb_01_r",
+      "new-name": "RightHandThumb1"
+    },
+    {
+      "old-name": "thumb_02_r",
+      "new-name": "RightHandThumb2"
+    },
+    {
+      "old-name": "thumb_03_r",
+      "new-name": "RightHandThumb3"
+    },
+    {
+      "old-name": "thumb_04_r",
+      "new-name": "RightHandThumb4"
+    },
+    {
+      "old-name": "clavicle_l",
+      "new-name": "LeftShoulder",
+      "ragdoll-proxy": "LeftShoulder__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Neck__ragdoll"
+    },
+    {
+      "old-name": "upperarm_l",
+      "new-name": "LeftArm",
+      "physics-proxy": "LeftArm__phys",
+      "ragdoll-proxy": "LeftArm__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftShoulder__ragdoll"
+    },
+    {
+      "old-name": "lowerarm_l",
+      "new-name": "LeftForeArm",
+      "physics-proxy": "LeftForeArm__phys",
+      "ragdoll-proxy": "LeftForeArm__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftArm__ragdoll"
+    },
+    {
+      "old-name": "hand_l",
+      "new-name": "LeftHand",
+      "physics-proxy": "LeftHand__phys",
+      "ragdoll-proxy": "LeftHand__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftForeArm__ragdoll"
+    },
+    {
+      "old-name": "thumb_01_l",
+      "new-name": "LeftHandThumb1"
+    },
+    {
+      "old-name": "thumb_02_l",
+      "new-name": "LeftHandThumb2"
+    },
+    {
+      "old-name": "thumb_03_l",
+      "new-name": "LeftHandThumb3"
+    },
+    {
+      "old-name": "thumb_04_l",
+      "new-name": "LeftHandThumb4"
+    },
+    {
+      "old-name": "index_01_l",
+      "new-name": "LeftHandIndex1"
+    },
+    {
+      "old-name": "index_02_l",
+      "new-name": "LeftHandIndex2"
+    },
+    {
+      "old-name": "index_03_l",
+      "new-name": "LeftHandIndex3"
+    },
+    {
+      "old-name": "index_04_l",
+      "new-name": "LeftHandIndex4"
+    },
+    {
+      "old-name": "middle_01_l1",
+      "new-name": "LeftHandMiddle1"
+    },
+    {
+      "old-name": "middle_02_l",
+      "new-name": "LeftHandMiddle2"
+    },
+    {
+      "old-name": "middle_03_l",
+      "new-name": "LeftHandMiddle3"
+    },
+    {
+      "old-name": "middle_04_l",
+      "new-name": "LeftHandMiddle4"
+    },
+    {
+      "old-name": "ring_01_l",
+      "new-name": "LeftHandRing1"
+    },
+    {
+      "old-name": "ring_02_l",
+      "new-name": "LeftHandRing2"
+    },
+    {
+      "old-name": "ring_03_l",
+      "new-name": "LeftHandRing3"
+    },
+    {
+      "old-name": "ring_04_l",
+      "new-name": "LeftHandRing4"
+    },
+    {
+      "old-name": "pinky_01_l",
+      "new-name": "LeftHandPinky1"
+    },
+    {
+      "old-name": "pinky_02_l",
+      "new-name": "LeftHandPinky2"
+    },
+    {
+      "old-name": "pinky_03_l",
+      "new-name": "LeftHandPinky3"
+    },
+    {
+      "old-name": "pinky_04_l",
+      "new-name": "LeftHandPinky4"
+    },
+    {
+      "old-name": "thigh_r01",
+      "new-name": "RightUpLeg",
+      "physics-proxy": "RightUpLeg__phys",
+      "ragdoll-proxy": "RightUpLeg__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Hips__ragdoll"
+    },
+    {
+      "old-name": "knee_r01",
+      "new-name": "RightLeg",
+      "physics-proxy": "RightLeg__phys",
+      "ragdoll-proxy": "RightLeg__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "RightUpLeg__ragdoll"
+    },
+    {
+      "old-name": "ankle_r01",
+      "new-name": "RightFoot",
+      "physics-proxy": "RightFoot__phys",
+      "ragdoll-proxy": "RightFoot__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "RightLeg__ragdoll"
+    },
+    {
+      "old-name": "ball_r01",
+      "new-name": "RightToeBase"
+    },
+    {
+      "old-name": "footend_r01",
+      "new-name": "RightToeEnd"
+    },
+    {
+      "old-name": "thigh_l01",
+      "new-name": "LeftUpLeg",
+      "physics-proxy": "LeftUpLeg__phys",
+      "ragdoll-proxy": "LeftUpLeg__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "Hips__ragdoll"
+    },
+    {
+      "old-name": "knee_l01",
+      "new-name": "LeftLeg",
+      "physics-proxy": "LeftLeg__phys",
+      "ragdoll-proxy": "LeftLeg__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftUpLeg__ragdoll"
+    },
+    {
+      "old-name": "ankle_l01",
+      "new-name": "LeftFoot",
+      "physics-proxy": "LeftFoot__phys",
+      "ragdoll-proxy": "LeftFoot__ragdoll",
+      "primitive-type": "Capsule",
+      "parent-node": "LeftLeg__ragdoll"
+    },
+    {
+      "old-name": "ball_l01",
+      "new-name": "LeftToeBase"
+    },
+    {
+      "old-name": "footend_l01",
+      "new-name": "LeftToeEnd"
+    }
+  ]
+}
