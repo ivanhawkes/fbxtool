@@ -91,11 +91,10 @@ void RenameSkeleton(FbxScene* pFbxScene, FbxNode* pFbxNode, std::string indexNam
 	Display3DVector("  Pre-Rotation: ", preRotation);
 	auto postRotation = pFbxNode->PostRotation.Get();
 	Display3DVector("  Post-Rotation: ", postRotation);
-	DisplayString("");
 
-	FbxAMatrix& worldTM = pFbxNode->EvaluateGlobalTransform();
-	Display3DVector("  World Rotation: ", worldTM.GetR());
-	Display3DVector("  World Translation: ", worldTM.GetT());
+	//FbxAMatrix& worldTM = pFbxNode->EvaluateGlobalTransform();
+	//Display3DVector("  World Rotation: ", worldTM.GetR());
+	//Display3DVector("  World Translation: ", worldTM.GetT());
 
 	if (strcmp(pFbxNode->GetName(), "Hips") == 0)
 	{
@@ -114,6 +113,8 @@ void RenameSkeleton(FbxScene* pFbxScene, FbxNode* pFbxNode, std::string indexNam
 		//preRotation.mData [2] = -temp;
 		//pFbxNode->PreRotation.Set(preRotation);
 	}
+
+	DisplayString("");
 }
 
 
