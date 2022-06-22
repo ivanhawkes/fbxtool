@@ -450,10 +450,6 @@ bool ProcessFile(FbxManager* pFbxManager, FbxScene* pFbxScene, FbxString fbxInFi
 
 		if (LoadScene(pFbxManager, pFbxScene, fbxInFilePath))
 		{
-			// Switch to a Z-Up co-ordinate system.
-			//FbxAxisSystem max;
-			//max.ConvertScene(pFbxScene);
-
 			// Display the scene.
 			DisplayMetaData(pFbxScene);
 			InterateContent(pFbxScene);
@@ -472,6 +468,10 @@ bool ProcessFile(FbxManager* pFbxManager, FbxScene* pFbxScene, FbxString fbxInFi
 
 			// Optionally, rename the animation to the filename.
 			RenameFirstAnimation(pFbxScene, fname);
+
+			// Switch to a Z-Up co-ordinate system.
+			FbxAxisSystem max;
+			max.ConvertScene(pFbxScene);
 
 			// Save a copy of the scene to a new file.
 			result = SaveScene(pFbxManager, pFbxScene, fbxOutFilePath);
